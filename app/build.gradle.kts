@@ -48,6 +48,10 @@ dependencies {
     implementation("com.tickaroo.tikxml:annotation:0.8.13")
     implementation("com.tickaroo.tikxml:core:0.8.13")
     kapt("com.tickaroo.tikxml:processor:0.8.13")
+    // Jsoup
+    implementation("org.jsoup:jsoup:1.15.3")
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.15.0")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

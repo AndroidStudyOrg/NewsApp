@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
+import org.jsoup.Jsoup
 import org.shop.newsapp.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,16 +45,48 @@ class MainActivity : AppCompatActivity() {
         }
 
         val newsService = retrofit.create(NewsService::class.java)
+
         newsService.mainFeed().enqueue(object : Callback<NewsRss> {
             override fun onResponse(call: Call<NewsRss>, response: Response<NewsRss>) {
                 Log.e("MainActivity", "${response.body()?.channel?.items}")
-                newsAdapter.submitList(response.body()?.channel?.items.orEmpty())
+
+                val transformedList = response.body()?.channel?.items.orEmpty().transform()
+
+                newsAdapter.submitList(transformedList)
+
+                transformedList.forEachIndexed { index, news ->
+                    Thread {
+                        try {
+                            Log.e("MainActivity", "link: ${news.link}")
+                            val jsoup = Jsoup.connect(news.link).ignoreContentType(true).get()
+                            val elements = jsoup.select("meta[property^=og:]")
+
+                            Log.e("MainActivity", "elements with property og: $elements")
+
+                            val ogImageNode = elements.find { node ->
+                                node.attr("property") == "og:image"
+                            }
+
+                            Log.e("MainActivity", "image: $ogImageNode")
+                            news.imageUrl = ogImageNode?.attr("content")
+                            Log.e(
+                                "MainActivity",
+                                "imageUrl: ${news.imageUrl}\n node: ${ogImageNode?.attr("content")}"
+                            )
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+
+                        runOnUiThread {
+                            newsAdapter.notifyItemChanged(index)
+                        }
+                    }.start()
+                }
             }
 
             override fun onFailure(call: Call<NewsRss>, t: Throwable) {
                 t.printStackTrace()
             }
-
         })
     }
 }
