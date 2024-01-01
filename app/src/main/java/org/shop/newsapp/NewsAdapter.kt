@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.shop.newsapp.databinding.ItemNewsBinding
 
-class NewsAdapter(private val onClick: (NewsModel) -> Unit) :
+class NewsAdapter(private val onClick: (String) -> Unit) :
     ListAdapter<NewsModel, NewsAdapter.NewsViewHolder>(diffUtil) {
     inner class NewsViewHolder(private val binding: ItemNewsBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -19,7 +19,7 @@ class NewsAdapter(private val onClick: (NewsModel) -> Unit) :
                 .into(binding.thumbnailImageView)
 
             binding.root.setOnClickListener {
-                onClick(item)
+                onClick(item.link)
             }
         }
     }

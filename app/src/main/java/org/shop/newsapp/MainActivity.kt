@@ -39,7 +39,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         newsAdapter = NewsAdapter {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.link))
+            val intent = Intent(this, WebViewActivity::class.java)
+            intent.putExtra("url", it)
             startActivity(intent)
         }
 
