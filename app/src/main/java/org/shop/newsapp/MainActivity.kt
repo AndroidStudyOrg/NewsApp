@@ -39,14 +39,61 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val newsService = retrofit.create(NewsService::class.java)
+
         binding.newsRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = newsAdapter
         }
 
-        val newsService = retrofit.create(NewsService::class.java)
+        binding.feedChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.feedChip.isChecked = true
 
-        newsService.mainFeed().enqueue(object : Callback<NewsRss> {
+            newsService.mainFeed().submitList()
+        }
+
+        binding.politicsChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.politicsChip.isChecked = true
+
+            newsService.politicsNews().submitList()
+        }
+
+        binding.economyChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.economyChip.isChecked = true
+
+            newsService.economyNews().submitList()
+        }
+
+        binding.societyChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.societyChip.isChecked = true
+
+            newsService.societyNews().submitList()
+        }
+
+        binding.itChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.itChip.isChecked = true
+
+            newsService.itNews().submitList()
+        }
+
+        binding.sportChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.sportChip.isChecked = true
+
+            newsService.sportNews().submitList()
+        }
+
+        binding.feedChip.isChecked = true
+        newsService.mainFeed().submitList()
+    }
+
+    private fun Call<NewsRss>.submitList() {
+        this.enqueue(object : Callback<NewsRss> {
             override fun onResponse(call: Call<NewsRss>, response: Response<NewsRss>) {
                 Log.e("MainActivity", "${response.body()?.channel?.items}")
 
