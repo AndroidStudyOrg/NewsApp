@@ -52,6 +52,8 @@ dependencies {
     implementation("org.jsoup:jsoup:1.15.3")
     // Glide
     implementation("com.github.bumptech.glide:glide:4.15.0")
+    // Lottie Animation
+    implementation("com.airbnb.android:lottie:6.2.0")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

@@ -2,13 +2,12 @@ package org.shop.newsapp
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
@@ -118,6 +117,8 @@ class MainActivity : AppCompatActivity() {
                 val transformedList = response.body()?.channel?.items.orEmpty().transform()
 
                 newsAdapter.submitList(transformedList)
+
+                binding.notFoundView.isVisible = transformedList.isEmpty()
 
                 transformedList.forEachIndexed { index, news ->
                     Thread {
